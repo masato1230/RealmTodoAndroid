@@ -11,7 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val todoRepository: TodoRepository) : ViewModel() {
     private val _todos = MutableLiveData<List<Todo>>()
-    val todo: LiveData<List<Todo>> = _todos
+    val todos: LiveData<List<Todo>> = _todos
 
     private fun refreshTodos() {
         viewModelScope.launch {
