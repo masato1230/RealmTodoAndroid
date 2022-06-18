@@ -1,5 +1,6 @@
 package com.jp_funda.realmtodo
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -38,8 +39,11 @@ class MainViewModel @Inject constructor(private val todoRepository: TodoReposito
         }
     }
 
-    fun addTodo(todo: Todo) {
+    fun addTodo() {
         viewModelScope.launch {
+            val todo = Todo()
+            todo.title = _title.value ?: ""
+            todo.description = _description.value ?: ""
             todoRepository.createTodo(todo)
             refreshTodos()
         }
