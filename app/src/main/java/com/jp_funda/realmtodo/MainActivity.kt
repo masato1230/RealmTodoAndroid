@@ -8,12 +8,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jp_funda.realmtodo.ui.theme.RealmTodoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -55,15 +54,23 @@ fun MainContent() {
 
 @Composable
 fun EditDialog(isShowDialog: MutableState<Boolean>) {
+    val viewModel = hiltViewModel<MainViewModel>()
+
+    val title by viewModel.title.observeAsState()
+    val description by viewModel.description.observeAsState()
+
     AlertDialog(
-        onDismissRequest = { isShowDialog.value = false },
+        onDismissRequest = {
+            isShowDialog.value = false
+            viewModel.clearTitleAndDescription()
+        },
         title = { Text(text = "Todo新規作成") },
         text = {
             Column {
                 Text(text = "タイトル")
-                TextField(value = "", onValueChange = { /* Todo */ })
+                TextField(value = title ?: "", onValueChange = { viewModel.setTitle(it) })
                 Text(text = "詳細")
-                TextField(value = "", onValueChange = { /* Todo */ })
+                TextField(value = description ?: "", onValueChange = { viewModel.setDescription(it) })
             }
         },
         buttons = {
@@ -74,7 +81,10 @@ fun EditDialog(isShowDialog: MutableState<Boolean>) {
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
                     modifier = Modifier.width(120.dp),
-                    onClick = { isShowDialog.value = false },
+                    onClick = {
+                        isShowDialog.value = false
+                        viewModel.clearTitleAndDescription()
+                    },
                 ) {
                     Text(text = "キャンセル")
                 }
@@ -83,7 +93,7 @@ fun EditDialog(isShowDialog: MutableState<Boolean>) {
                     modifier = Modifier.width(120.dp),
                     onClick = {
                         isShowDialog.value = false
-                        /* TODO todoの追加 */
+                        viewModel.addTodo()
                     },
                 ) {
                     Text(text = "OK")

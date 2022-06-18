@@ -13,6 +13,25 @@ class MainViewModel @Inject constructor(private val todoRepository: TodoReposito
     private val _todos = MutableLiveData<List<Todo>>()
     val todos: LiveData<List<Todo>> = _todos
 
+    private val _title = MutableLiveData("")
+    val title: LiveData<String> = _title
+
+    private val _description = MutableLiveData("")
+    val description: LiveData<String> = _description
+
+    fun setTitle(value: String) {
+        _title.value = value
+    }
+
+    fun setDescription(value: String) {
+        _description.value = value
+    }
+
+    fun clearTitleAndDescription() {
+        _title.value = ""
+        _description.value = ""
+    }
+
     private fun refreshTodos() {
         viewModelScope.launch {
             _todos.value = todoRepository.getAllTodo()
