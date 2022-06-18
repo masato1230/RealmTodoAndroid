@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.jp_funda.realmtodo.ui.theme.RealmTodoTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,8 +23,22 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    MainContent()
                 }
             }
         }
+    }
+}
+
+@Composable
+fun MainContent() {
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "追加ボタン")
+            }
+        }
+    ) {
+
     }
 }
