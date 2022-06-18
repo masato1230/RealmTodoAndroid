@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -37,6 +39,11 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainContent() {
+    val viewModel = hiltViewModel<MainViewModel>()
+    LaunchedEffect(Unit) {
+        viewModel.refreshTodos()
+    }
+
     val isShowDialog = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -49,6 +56,8 @@ fun MainContent() {
         if (isShowDialog.value) {
             EditDialog(isShowDialog)
         }
+
+        TodoList()
     }
 }
 
@@ -70,7 +79,9 @@ fun EditDialog(isShowDialog: MutableState<Boolean>) {
                 Text(text = "タイトル")
                 TextField(value = title ?: "", onValueChange = { viewModel.setTitle(it) })
                 Text(text = "詳細")
-                TextField(value = description ?: "", onValueChange = { viewModel.setDescription(it) })
+                TextField(
+                    value = description ?: "",
+                    onValueChange = { viewModel.setDescription(it) })
             }
         },
         buttons = {
@@ -101,4 +112,18 @@ fun EditDialog(isShowDialog: MutableState<Boolean>) {
             }
         }
     )
+}
+
+@Composable
+fun TodoList() {
+    val viewModel = hiltViewModel<MainViewModel>()
+    val todos by viewModel.todos.observeAsState()
+
+    todos?.let { todoList ->
+        LazyColumn {
+            items(todoList) {
+                Text(text = it.title)
+            }
+        }
+    }
 }
