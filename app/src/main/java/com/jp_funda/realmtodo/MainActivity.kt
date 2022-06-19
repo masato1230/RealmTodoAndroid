@@ -10,8 +10,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -122,7 +124,28 @@ fun TodoList() {
     todos?.let { todoList ->
         LazyColumn {
             items(todoList) {
-                Text(text = it.title)
+                TodoRow(it)
+            }
+        }
+    }
+}
+
+@Composable
+fun TodoRow(todo: Todo) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp),
+        elevation = 5.dp,
+    ) {
+        Row(
+            modifier = Modifier.padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(text = todo.title)
+            Spacer(modifier = Modifier.weight(1f))
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Delete, contentDescription = "削除ボタン")
             }
         }
     }
