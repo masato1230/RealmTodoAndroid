@@ -8,7 +8,7 @@ import java.util.*
 class Todo : RealmObject {
     @PrimaryKey
     @NotNull
-    var id: UUID = UUID.randomUUID()
+    var id: String = UUID.randomUUID().toString()
     var title: String = ""
     var description: String = ""
 }
