@@ -62,9 +62,13 @@ class MainViewModel @Inject constructor(private val todoRepository: TodoReposito
         }
     }
 
-    fun updateTodo(todo: Todo) {
+    // 更新
+    fun updateTodo() {
         viewModelScope.launch {
-            todoRepository.createTodo(todo)
+            updatingTodo!!.title = _title.value ?: ""
+            updatingTodo!!.description = _description.value ?: ""
+            todoRepository.updateTodo(updatingTodo!!)
+            updatingTodo = null
             refreshTodos()
         }
     }

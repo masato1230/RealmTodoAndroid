@@ -76,7 +76,7 @@ fun EditDialog(isShowDialog: MutableState<Boolean>) {
             isShowDialog.value = false
             viewModel.clearTitleAndDescription()
         },
-        title = { Text(text = "Todo新規作成") },
+        title = { Text(text = if (viewModel.isUpdating) "Todo編集" else "Todo新規作成") },
         text = {
             Column {
                 Text(text = "タイトル")
@@ -107,7 +107,11 @@ fun EditDialog(isShowDialog: MutableState<Boolean>) {
                     modifier = Modifier.width(120.dp),
                     onClick = {
                         isShowDialog.value = false
-                        viewModel.addTodo()
+                        if (viewModel.isUpdating) {
+                            viewModel.updateTodo()
+                        } else {
+                            viewModel.addTodo()
+                        }
                     },
                 ) {
                     Text(text = "OK")
