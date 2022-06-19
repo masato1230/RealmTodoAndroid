@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -59,7 +60,7 @@ fun MainContent() {
             EditDialog(isShowDialog)
         }
 
-        TodoList()
+        TodoList(isShowDialog)
     }
 }
 
@@ -117,27 +118,31 @@ fun EditDialog(isShowDialog: MutableState<Boolean>) {
 }
 
 @Composable
-fun TodoList() {
+fun TodoList(isShowDialog: MutableState<Boolean>) {
     val viewModel = hiltViewModel<MainViewModel>()
     val todos by viewModel.todos.observeAsState()
 
     todos?.let { todoList ->
         LazyColumn {
             items(todoList) {
-                TodoRow(it)
+                TodoRow(isShowDialog, it)
             }
         }
     }
 }
 
 @Composable
-fun TodoRow(todo: Todo) {
+fun TodoRow(isShowDialog: MutableState<Boolean>, todo: Todo) {
     val viewModel = hiltViewModel<MainViewModel>()
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp),
+            .padding(5.dp)
+            .clickable {
+                viewModel.setUpdatingTodo(todo)
+                isShowDialog.value = true
+            },
         elevation = 5.dp,
     ) {
         Row(

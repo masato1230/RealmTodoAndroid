@@ -19,6 +19,19 @@ class MainViewModel @Inject constructor(private val todoRepository: TodoReposito
     private val _description = MutableLiveData("")
     val description: LiveData<String> = _description
 
+    private var updatingTodo: Todo? = null
+
+    fun setUpdatingTodo(todo: Todo) {
+        updatingTodo = todo
+        _title.value = todo.title
+        _description.value = todo.description
+    }
+
+    val isUpdating: Boolean
+        get() {
+            return updatingTodo != null
+        }
+
     fun setTitle(value: String) {
         _title.value = value
     }
