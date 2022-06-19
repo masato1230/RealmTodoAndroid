@@ -3,7 +3,6 @@ package com.jp_funda.realmtodo
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
-import io.realm.kotlin.query.RealmResults
 import javax.inject.Inject
 
 class TodoRepository @Inject constructor() {
@@ -22,9 +21,15 @@ class TodoRepository @Inject constructor() {
     }
 
     /** Read. */
-    suspend fun getAllTodo(): RealmResults<Todo> {
+    fun getAllTodos(): List<Todo> {
         getRealmInstance().apply {
-            val todos = query<Todo>().find()
+            val todos = query<Todo>().find().map{
+                Todo().apply {
+                    id = it.id
+                    title = it.title
+                    description = it.description
+                }
+            }
             close()
             return todos
         }

@@ -34,7 +34,7 @@ class MainViewModel @Inject constructor(private val todoRepository: TodoReposito
 
     fun refreshTodos() {
         viewModelScope.launch {
-            _todos.value = todoRepository.getAllTodo()
+            _todos.value = todoRepository.getAllTodos()
         }
     }
 
@@ -44,6 +44,7 @@ class MainViewModel @Inject constructor(private val todoRepository: TodoReposito
             todo.title = _title.value ?: ""
             todo.description = _description.value ?: ""
             todoRepository.createTodo(todo)
+            clearTitleAndDescription()
             refreshTodos()
         }
     }
