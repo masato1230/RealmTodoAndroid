@@ -132,6 +132,8 @@ fun TodoList() {
 
 @Composable
 fun TodoRow(todo: Todo) {
+    val viewModel = hiltViewModel<MainViewModel>()
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -144,7 +146,7 @@ fun TodoRow(todo: Todo) {
         ) {
             Text(text = todo.title)
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { viewModel.deleteTodo(todo) }) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = "削除ボタン")
             }
         }
