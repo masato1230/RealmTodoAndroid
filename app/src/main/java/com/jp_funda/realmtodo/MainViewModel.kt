@@ -40,7 +40,8 @@ class MainViewModel @Inject constructor(private val todoRepository: TodoReposito
         _description.value = value
     }
 
-    fun clearTitleAndDescription() {
+    fun clearData() {
+        updatingTodo = null
         _title.value = ""
         _description.value = ""
     }
@@ -57,7 +58,7 @@ class MainViewModel @Inject constructor(private val todoRepository: TodoReposito
             todo.title = _title.value ?: ""
             todo.description = _description.value ?: ""
             todoRepository.createTodo(todo)
-            clearTitleAndDescription()
+            clearData()
             refreshTodos()
         }
     }
@@ -68,7 +69,7 @@ class MainViewModel @Inject constructor(private val todoRepository: TodoReposito
             updatingTodo!!.title = _title.value ?: ""
             updatingTodo!!.description = _description.value ?: ""
             todoRepository.updateTodo(updatingTodo!!)
-            updatingTodo = null
+            clearData()
             refreshTodos()
         }
     }
